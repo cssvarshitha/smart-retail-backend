@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Smart Retail System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .left-side {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #e6f2ff;
+      padding: 20px;
+    }
+
+    .left-side img {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .right-side {
+      width: 50%;
+      background-color: #e6f2ff;
+      padding: 40px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .header-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .header-box img {
+      height: 40px;
+      width: auto;
+    }
+
+    .header-box h2 {
+      font-size: 24px;
+      color: #0071ce;
+      font-weight: 600;
+    }
+
+    .page-heading {
+      font-size: 26px;
+      color: #0071ce;
+      font-weight: 600;
+      text-align: center;
+      margin: 15px 0 25px;
+    }
+
+    .role-selector {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .role-box {
+  padding: 12px 24px;
+  border: 2px solid #0071ce;
+  border-radius: 10px;
+  color: #0071ce;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.role-box.active {
+  background-color: #0071ce;
+  color: white;
+}
+
+.role-box:hover {
+  background-color: #ffeb3b;
+  color: #333;
+}
+    .login-form label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 500;
+      color: #153147;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      transition: border-color 0.3s ease;
+    }
+
+    .forgot-password {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .forgot-password a {
+      font-size: 17px;
+      font-weight: 600;
+      color: #0071ce;
+      text-decoration: none;
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    .login-btn {
+      background-color: #0071ce;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background-color: #ffeb3b;
+      color: #333;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 16px;
+      color: #0071ce;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .left-side,
+      .right-side {
+        width: 100%;
+        height: auto;
+      }
+
+      .right-side {
+        padding: 20px;
+      }
+
+      .header-box {
+        justify-content: center;
+      }
+
+      .page-heading {
+        text-align: center;
+      }
+
+      .role-selector {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Image Panel -->
+  <div class="left-side">
+    <img id="role-image" src="cssgn.jpeg" alt="Walmart Image">
+  </div>
+
+  <!-- Right Login Form -->
+  <div class="right-side">
+
+    <!-- Header -->
+    <div class="header-box">
+      <img src="logo.jpeg" alt="Walmart Logo">
+      <h2>Walmart | Smart Retail System</h2>
+    </div>
+
+    <!-- Page Heading -->
+    <div class="page-heading">Login to Your Account</div>
+
+    <!-- Role Toggle Boxes -->
+    <div class="role-selector">
+      <div class="role-box active" onclick="switchRole('customer')">Customer</div>
+      <div class="role-box" onclick="switchRole('manager')">Manager</div>
+    </div>
+
+    <!-- Customer Login Form -->
+    <div id="customer-form" class="form-section active">
+      <form class="login-form" onsubmit="return handleCustomerLogin(event)">
+        <label for="cemail">Email Address</label>
+        <input type="email" id="cemail" name="email" placeholder="Enter your email" required>
+
+        <label for="cpassword">Password</label>
+        <input type="password" id="cpassword" name="password" placeholder="Enter your password" required>
+
+        <div class="forgot-password">
+          <a href="csforpass.html">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+    </div>
+
+    <!-- Manager Login Form -->
+    <div id="manager-form" class="form-section">
+      <form class="login-form" onsubmit="return handleManagerLogin(event)">
+        <label for="empid">Walmart Employee ID</label>
+        <input type="text" id="empid" name="empid" placeholder="Enter your Employee ID" required>
+
+        <label for="mpassword">Password</label>
+        <input type="password" id="mpassword" name="password" placeholder="Enter your password" required>
+
+        <div class="forgot-password">
+          <a href="mgforpass.html">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+    </div>
+
+    <a href="prehmp.html" class="back-link">← Back to Homepage</a>
+  </div>
+
+  <!-- Script to handle role switching and login -->
+  <script>
+    function switchRole(role) {
+      const customerBox = document.querySelector('.role-box:nth-child(1)');
+      const managerBox = document.querySelector('.role-box:nth-child(2)');
+      const customerForm = document.getElementById('customer-form');
+      const managerForm = document.getElementById('manager-form');
+      const image = document.getElementById('role-image');
+
+      if (role === 'customer') {
+        customerBox.classList.add('active');
+        managerBox.classList.remove('active');
+        customerForm.classList.add('active');
+        managerForm.classList.remove('active');
+        image.src = 'cssgn.jpeg';
+      } else {
+        managerBox.classList.add('active');
+        customerBox.classList.remove('active');
+        managerForm.classList.add('active');
+        customerForm.classList.remove('active');
+        image.src = 'mgsgn.jpeg';
+      }
+    }
+
+    function handleCustomerLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('cemail').value;
+      const password = document.getElementById('cpassword').value;
+      if (email && password) {
+        alert("Customer login successful!");
+        window.location.href = "http://localhost:3000/csdashboard.html";
+      } else {
+        alert("Invalid customer credentials.");
+      }
+    }
+
+    function handleManagerLogin(event) {
+      event.preventDefault();
+      const empid = document.getElementById('empid').value;
+      const password = document.getElementById('mpassword').value;
+      if (empid && password) {
+        alert("Manager login successful!");
+        window.location.href = "http://localhost:3000/mgdashboard.html";
+      } else {
+        alert("Invalid manager credentials.");
+      }
+    }
+  </script>
+
+</body>
+</html>

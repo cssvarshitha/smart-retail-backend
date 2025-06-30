@@ -1,0 +1,70 @@
+1.website login ( login.html) - 2 options - login as customer or login as manager 
+2.website signup ( signup.html)
+3.forgot password ( forpass.html)
+4.customer homepage ( ch.html) 
+🛍 4. Customer Interface
+4.1 Home Page
+Usual categories, recommendations.
+
+Scrolling Banner or Flash Sale Section:
+
+"Hurry! Limited Time Discounts on Near-Expiry Items"
+
+Click → Navigates to dedicated page
+
+4.2 Expiring Soon Deals Page
+Grid or List of discounted items:
+
+Item Name, Discount %, Expiry Date, Remaining Stock
+
+"Buy Now" button
+
+Filter by category, price, expiry time
+
+4.3 Cart & Checkout
+Shows item expiry warning: “Best before: X date”
+
+Option to proceed to payment
+
+5.manager homepage ( mh.html)
+
+5.1 Inventory Management
+Table with columns: Item Name, Category, Price, Expiry Date, Stock, Discount %
+
+Filter by:
+
+Expiring in next 2 days
+
+Category
+
+Stock Level
+
+Option to:
+
+Add/edit items
+
+Update stock
+
+Set manual discount %
+
+5.2 Notification System (Automated Logic)
+A backend job runs daily:
+
+Compares expiry date with today’s date.
+
+If expiry_date - today <= 2, add item to “Expiring Soon” list.
+
+Send:
+
+🔔 Internal Notification on dashboard
+
+📧 Email to manager with item details
+
+5.3 Announcement Trigger
+After receiving a notification, manager can:
+
+✅ Approve automatic discount & make it public.
+
+📢 Click “Announce in Store” → generates a printable sheet or connects with Walmart’s in-store PA system (future scope).
+
+🌐 Enable online visibility: shows on customer home page as flash sale.

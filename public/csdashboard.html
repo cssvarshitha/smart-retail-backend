@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Customer Dashboard | Smart Retail System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f2f8ff;
+    }
+    header {
+      background-color: #0071ce;
+      padding: 15px 30px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-size: 24px;
+    }
+    .header-actions {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .tool-btn {
+      background-color: #fff;
+      color: #0071ce;
+      border: none;
+      padding: 10px 16px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .tool-btn:hover {
+      background-color: #ffeb3b;
+      color: #333;
+    }
+    .cart-icon {
+      font-size: 18px;
+      color: white;
+      cursor: pointer;
+    }
+    .cart-icon:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      padding: 30px;
+    }
+
+    .greeting {
+      font-size: 22px;
+      color: #153147;
+      margin-bottom: 20px;
+    }
+
+    #notification-bar {
+      font-size: 18px;
+      background-color: #e6f2ff;
+      padding: 14px;
+      border-left: 5px solid #0071ce;
+      color: #d32f2f;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+   .flash-banner {
+  background-color: #ffe600;
+  padding: 10px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.marquee {
+  white-space: nowrap;
+  display: inline-block;
+  animation: scroll-left 10s linear infinite;
+}
+
+.marquee span {
+  font-weight: bold;
+  font-size: 20px;
+  color: #d32f2f;
+  padding-left: 100%;
+  display: inline-block;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+    .section-title {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #0071ce;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin-top: 10px;
+      color: #153147;
+    }
+
+   .recent .card {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  text-align: center;
+  height: auto;
+}
+
+.recent .card img {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+
+    .toolbar {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .find-btn {
+      font-size: 18px;
+      background-color: #0071ce;
+      color: white;
+      padding: 14px 22px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .find-btn:hover {
+      background-color: #005bb5;
+    }
+
+    #chatbox {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      padding: 15px;
+      width: 300px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      display: none;
+    }
+
+    #chatbox h4 {
+      color: #0071ce;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Smart Retail Customer Dashboard</h1>
+  <div class="header-actions">
+  <button class="tool-btn" onclick="toggleChat()">💬 Chat Assistant</button>
+  <button class="tool-btn" onclick="speakWelcome()">🎤 Voice Assistant</button>
+  <div class="cart-icon" onclick="alert('Viewing Cart...')">🛒 Cart</div>
+  <button class="tool-btn" onclick="logout()">🚪 Logout</button>
+</div>
+</header>
+
+<div class="container">
+  <div class="greeting" id="greeting">Hello Customer</div>
+
+  <div id="notification-bar" onclick="showExpiringItems()">
+    🔔 Expiring soon: 2 items in your wishlist will expire in the next 3 days!
+  </div>
+
+  <div class="flash-banner">
+  <div class="marquee">
+    <span>⚡ Limited Time Deals on Expiring Products – Hurry Up!</span>
+  </div>
+</div>
+
+  <div class="categories">
+    <h2 class="section-title">🛍️ Browse Categories</h2>
+    <div class="grid">
+      <div class="card" onclick="alert('Browsing Dairy')"><img src="dairy.jpeg"><h3>Dairy</h3></div>
+      <div class="card" onclick="alert('Browsing Snacks')"><img src="snacks.jpeg"><h3>Snacks</h3></div>
+      <div class="card" onclick="alert('Browsing Beverages')"><img src="beverages.jpeg"><h3>Beverages</h3></div>
+      <div class="card" onclick="alert('Browsing Frozen')"><img src="frozen.jpeg"><h3>Frozen Foods</h3></div>
+    </div>
+  </div>
+
+  <div class="recommendations">
+    <h2 class="section-title">🤖 AI Recommendations</h2>
+    <div class="grid">
+      <div class="card"><img src="rec1.jpeg"><h3>Organic Groceries</h3></div>
+      <div class="card"><img src="rec2.jpeg"><h3>Trail Mix Pack</h3></div>
+      <div class="card"><img src="rec3.jpeg"><h3>Vitamin Water</h3></div>
+    </div>
+  </div>
+
+  <div class="recent">
+    <h2 class="section-title">🕒 Recently Viewed</h2>
+    <div class="grid">
+      <div class="card"><img src="recent1.jpeg"><h3>Greek Yogurt</h3></div>
+      <div class="card"><img src="recent2.jpeg"><h3>Fruit Juice</h3></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="find-btn" onclick="locateStore()">📍 Find Walmart Near Me</button>
+  </div>
+</div>
+
+<!-- Chat Assistant -->
+<div id="chatbox">
+  <h4>Smart Assistant</h4>
+  <p>Hi! Need help finding deals or items expiring soon?</p>
+</div>
+
+<script>
+  const name = localStorage.getItem('customerName') || 'Shopper';
+  document.getElementById('greeting').textContent = `Hi, ${name}! 👋 Welcome to your smart shopping dashboard.`;
+
+  function speakWelcome() {
+    const msg = new SpeechSynthesisUtterance(`Hello ${name}, welcome to Walmart Smart Retail. What can I help you with today?`);
+    window.speechSynthesis.speak(msg);
+  }
+
+  function toggleChat() {
+    const box = document.getElementById('chatbox');
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function showExpiringItems() {
+  const flashItems = JSON.parse(localStorage.getItem('flashSaleSelected') || '[]');
+  const alreadyShown = localStorage.getItem('flashShown') === 'true';
+
+  if (flashItems.length === 0 || alreadyShown) {
+    alert("No expiring items found in your wishlist.");
+    return;
+  }
+
+  // ✅ mark as shown
+  localStorage.setItem('flashShown', 'true');
+
+  // ✅ Open the new flash sale page
+  window.open('flash_sale.html', '_blank');
+}
+
+  function locateStore() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        alert(`Your Location:\nLat: ${position.coords.latitude}\nLong: ${position.coords.longitude}\nShowing nearby stores...`);
+      }, () => {
+        alert("Location access denied. Cannot find nearby stores.");
+      });
+    } else {
+      alert("Geolocation not supported by your browser.");
+    }
+  }
+
+  function logout() {
+    if (confirm("Are you sure you want to log out?")) {
+      localStorage.removeItem("customerName");
+      window.location.href = "login.html";
+    }
+  }
+</script>
+
+</body>
+</html>

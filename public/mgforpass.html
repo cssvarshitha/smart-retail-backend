@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forgot Password | Smart Retail System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #e6f2ff;
+    }
+
+    .left-side {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #e6f2ff;
+      padding: 20px;
+    }
+
+    .left-side img {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .right-side {
+      width: 50%;
+      padding: 40px;
+      background-color: #e6f2ff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .header-box img {
+      height: 40px;
+    }
+
+    .header-box h2 {
+      font-size: 24px;
+      color: #0071ce;
+      font-weight: 600;
+    }
+
+    .page-heading {
+      font-size: 26px;
+      color: #0071ce;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+
+    .form label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 500;
+      color: #153147;
+    }
+
+    .form input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      margin-top: 6px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form input:focus {
+      border-color: #0071ce;
+      outline: none;
+    }
+
+    .submit-btn {
+      margin-top: 30px;
+      background-color: #0071ce;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #ffeb3b;
+      color: #333;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #0071ce;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .left-side,
+      .right-side {
+        width: 100%;
+      }
+
+      .right-side {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Image -->
+  <div class="left-side">
+    <img src="forpass.jpeg" alt="Forgot Password Visual">
+  </div>
+
+  <!-- Right Form -->
+  <div class="right-side">
+    <div class="header-box">
+      <img src="logo.jpeg" alt="Walmart Logo">
+      <h2>Walmart | Smart Retail System</h2>
+    </div>
+
+    <div class="page-heading">Forgot Password</div>
+
+    <form class="form" onsubmit="return handleForgotPassword(event)">
+      <label for="email">Registered Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <button type="submit" class="submit-btn">Send Reset Link</button>
+    </form>
+
+    <a href="mglg.html" class="back-link">← Back to Manager Login</a>
+  </div>
+
+  <script>
+function handleForgotPassword(event) {
+  event.preventDefault();
+  const email = document.getElementById('email').value;
+
+  fetch('http://localhost:3000/api/forgot-password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email })
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert(data.message || 'Reset link sent!');
+    window.location.href = 'mglg.html';
+  })
+  .catch(error => {
+    alert('Something went wrong. Please try again later.');
+    console.error('Error:', error);
+  });
+
+  return false;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add New Inventory Item | Smart Retail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #eaf3ff;
+    }
+    header {
+      background-color: #0071ce;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 30px;
+    }
+    header h2 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .back-btn {
+      background-color: white;
+      color: #0071ce;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .back-btn:hover {
+      background-color: #ffde00;
+    }
+    .form-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h3 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 22px;
+      color: #0071ce;
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .form-group {
+      width: 48%;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group label {
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+    }
+    .form-group input {
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .submit-btn {
+      width: 100%;
+      margin-top: 30px;
+      background-color: #0071ce;
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #005ba8;
+    }
+    @media (max-width: 768px) {
+      .form-group {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>Add New Inventory Item</h2>
+  <button class="back-btn" onclick="window.location.href='mgdashboard.html'">← Back</button>
+</header>
+
+<div class="form-container">
+  <h3>Enter Product Details</h3>
+  <form onsubmit="submitForm(event)">
+    <div class="form-group">
+      <label for="sku">SKU</label>
+      <input type="text" id="sku" name="sku" required>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="expiry">Expiry Date</label>
+      <input type="date" id="expiry" name="expiry" required>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input type="text" id="category" name="category" required>
+    </div>
+
+    <div class="form-group">
+      <label for="qty">Quantity</label>
+      <input type="number" id="qty" name="qty" required>
+    </div>
+
+    <div class="form-group">
+      <label for="mrp">MRP (₹)</label>
+      <input type="number" id="mrp" name="mrp" required>
+    </div>
+
+    <div class="form-group">
+      <label for="discount">Discount %</label>
+      <input type="number" id="discount" name="discount">
+    </div>
+    <div class="form-group">
+      <label>Shelf Number:</label>
+<input type="text" name="shelfNumber" required>
+
+    </div>
+
+    <div class="form-group" style="width: 100%;">
+      <button type="submit" class="submit-btn">➕ Add Item</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function submitForm(event) {
+    event.preventDefault();
+
+    const newItem = {
+  SKU: document.getElementById('sku').value,
+  Name: document.getElementById('name').value,
+  Expiry: document.getElementById('expiry').value,
+  Category: document.getElementById('category').value,
+  Qty: document.getElementById('qty').value,
+  MRP: document.getElementById('mrp').value,
+  'Shelf Number': document.getElementById('shelfNumber').value,  // ✅ ADDED HERE
+  'Discount %': document.getElementById('discount').value || 0,
+  'Discounted Price': 0 // Backend will recalculate
+};
+
+    fetch('/api/inventory', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newItem)
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert('Item added!');
+      window.location.href = 'mgdashboard.html';
+    })
+    .catch(err => {
+      alert('Failed to add item.');
+      console.error(err);
+    });
+  }
+</script>
+</body>
+</html>

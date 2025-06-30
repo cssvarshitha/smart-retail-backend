@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Retail System</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff;
+      color: #333;
+    }
+
+    header {
+      background-color: #0071ce;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 40px;
+    }
+
+    header h1 {
+      display: flex;
+      align-items: center;
+      font-size: 26px;
+    }
+
+    header h1 img {
+      height: 40px;
+      margin-right: 12px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 25px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .hero-text, .hero-img {
+      width: 50%;
+      height: 100%;
+    }
+
+    .hero-text {
+      background-color: yellow;
+      color: #0071ce;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .hero-text h2 {
+      font-size: 44px;
+      font-weight: bold;
+      line-height: 1.5;
+      max-width: 90%;
+    }
+
+    .hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    section {
+      padding: 60px 40px;
+      font-size: 20px;
+      line-height: 1.8;
+    }
+
+    section h2 {
+      font-size: 34px;
+      color: #0071ce;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    #faq {
+      background-color: #f1f1f1;
+    }
+
+    .faq-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .faq-box {
+      background-color: #fff700;
+      color: #0071ce;
+      border-radius: 12px;
+      padding: 20px 25px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      font-size: 18px;
+      line-height: 1.6;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-box:hover {
+      transform: scale(1.03);
+    }
+
+    .faq-box strong {
+      display: block;
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .faq-box .icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    @media (max-width: 992px) {
+      .faq-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .faq-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>
+      <img src="logo.jpeg" alt="Walmart Logo">
+      Walmart | Smart Retail System
+    </h1>
+    <nav>
+      <a href="#top">Home</a>
+      <a href="#about">About Smart Retail</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact Us</a>
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="hero-text">
+      <h2>
+        Smarter Inventory, Lesser Wastage –<br />
+        Get Alerts on Near-Expiry Products!
+      </h2>
+    </div>
+    <div class="hero-img" onmouseover="startImageCycle()" onmouseleave="stopImageCycle()">
+      <img id="rotating-img" src="prehmp.jpeg" alt="Walmart Store">
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About Smart Retail</h2>
+    <p>
+      Smart Retail System is an innovative platform that bridges modern technology with traditional retail, ensuring optimal product turnover and minimal wastage.
+      The system uses real-time inventory monitoring to detect products nearing expiration and immediately alerts managers with actionable suggestions.
+    </p>
+    <p>
+      It empowers store managers to offer quick discounts, organize flash sales, and inform customers about deals—thus preventing unnecessary waste.
+      With AI-assisted dashboards and customer-targeted alerts, this solution enhances efficiency, cuts losses, and promotes sustainability in retail environments.
+    </p>
+  </section>
+
+  <section id="faq">
+    <h2>Frequently Asked Questions (FAQs)</h2>
+    <div class="faq-container">
+      <div class="faq-box">
+        <span class="icon">💡</span>
+        <strong>Q: What is Smart Retail System?</strong>
+        A: A platform to notify managers about near-expiry items and offer them to customers at discounted rates.
+      </div>
+      <div class="faq-box">
+        <span class="icon">🛒</span>
+        <strong>Q: Who benefits from this system?</strong>
+        A: Store managers for inventory handling, and customers for savings on near-expiry items.
+      </div>
+      <div class="faq-box">
+        <span class="icon">✅</span>
+        <strong>Q: Is it safe to buy near-expiry items?</strong>
+        A: Yes, products are verified and still safe within consumption range before sale.
+      </div>
+      <div class="faq-box">
+        <span class="icon">🌐</span>
+        <strong>Q: Can customers access these deals online?</strong>
+        A: Yes, via the Smart Retail portal with real-time flash sales.
+      </div>
+      <div class="faq-box">
+        <span class="icon">🌱</span>
+        <strong>Q: How does this help the environment?</strong>
+        A: It reduces waste and supports eco-friendly shopping.
+      </div>
+      <div class="faq-box">
+        <span class="icon">🏪</span>
+        <strong>Q: Where is this system available?</strong>
+        A: Currently in selected Walmart stores, with more locations planned.
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="background-color: white; color: #0071ce; padding: 60px 40px;">
+    <h2 style="color: #0071ce; text-align: center; font-size: 32px;">Contact Us</h2>
+    <div style="max-width: 900px; margin: auto; text-align: center; padding: 30px 20px;">
+      <p style="font-size: 20px; margin-bottom: 15px;">
+        📧 Email us at: <a href="mailto:support@smartretail.com" style="color: #0055a4; text-decoration: underline;">support@smartretail.com</a>
+      </p>
+      <p style="font-size: 20px; margin-bottom: 25px;">
+        📞 Call us: <span style="color: #0055a4;">+91-90000-00000</span>
+      </p>
+
+      <div style="margin-top: 30px;">
+        <p style="margin-bottom: 10px; font-size: 18px;">Follow us on</p>
+        <div style="font-size: 28px;">
+          <a href="#" style="margin: 0 12px; color: white;">🌐</a>
+          <a href="#" style="margin: 0 12px; color: white;">📘</a>
+          <a href="#" style="margin: 0 12px; color: white;">📷</a>
+          <a href="#" style="margin: 0 12px; color: white;">🐦</a>
+        </div>
+      </div>
+
+      <hr style="margin: 40px auto 20px; border: 1px solid #ffce00; width: 60%;">
+      <p style="font-size: 14px; color: #0071ce;">© 2025 Walmart Smart Retail System. All rights reserved.</p>
+    </div>
+  </section>
+
+  <script>
+    const images = ['prehmp.jpeg', 'prehmp2.jpeg', 'prehmp3.jpeg', 'prehmp4.jpeg'];
+    let currentImageIndex = 0;
+    let intervalId = null;
+
+    function startImageCycle() {
+      const imgElement = document.getElementById('rotating-img');
+      intervalId = setInterval(() => {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        imgElement.src = images[currentImageIndex];
+      }, 1000);
+    }
+
+    function stopImageCycle() {
+      clearInterval(intervalId);
+      currentImageIndex = 0;
+      document.getElementById('rotating-img').src = images[0];
+    }
+  </script>
+
+</body>
+</html>

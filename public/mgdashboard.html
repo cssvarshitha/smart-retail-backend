@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manager Dashboard | Smart Retail System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #eaf3ff;
+    }
+    header {
+      background-color: #0071ce;
+      padding: 16px 30px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h2 {
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .logout-btn {
+      background-color: white;
+      color: #0071ce;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .logout-btn:hover {
+      background-color: #ffde00;
+      color: #0071ce;
+    }
+    .dashboard-container {
+      padding: 30px;
+    }
+    .welcome {
+      font-size: 22px;
+      margin-bottom: 25px;
+      color: #153147;
+    }
+    .cards-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .card-link {
+      text-decoration: none;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      width: 200px;
+      text-align: center;
+      padding: 15px 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .card h3 {
+      font-size: 16px;
+      margin-top: 10px;
+      color: #0071ce;
+    }
+    h4 {
+      font-size: 22px;
+      margin: 30px 0 15px;
+      color: #0e4a7b;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 14px;
+      text-align: center;
+      font-size: 16px;
+    }
+    th {
+      background-color: #0071ce;
+      color: white;
+    }
+    .blue-btn {
+      background-color: #0071ce;
+      color: white;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .filter-tools {
+      margin-bottom: 20px;
+    }
+    .filter-tools input,
+    .filter-tools button {
+      font-size: 16px;
+      margin-right: 10px;
+      padding: 8px 10px;
+    }
+    .checkbox-cell input {
+      transform: scale(1.2);
+    }
+    /* New editable qty styling */
+    td[contenteditable="true"] {
+      background-color: #fff9c4;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>Smart Retail | Manager Dashboard</h2>
+  <button class="logout-btn" onclick="window.location.href='login.html'">Logout</button>
+</header>
+
+<div class="dashboard-container">
+  <div class="welcome">Hi, Manager! 👋 Control your smart store here.</div>
+
+  <div class="cards-row">
+    <div class="card-link" onclick="scrollToSection('inventorySection')">
+      <div class="card">
+        <img src="inventory.jpeg" alt="Inventory">
+        <h3>Inventory Management</h3>
+      </div>
+    </div>
+    <div class="card-link" onclick="scrollToSection('expirySection')">
+      <div class="card">
+        <img src="expiry.jpeg" alt="Expiry">
+        <h3>Track Expiring Products</h3>
+      </div>
+    </div>
+    <div class="card-link" onclick="scrollToSection('ordersSection')">
+      <div class="card">
+        <img src="orders.jpg" alt="Customers">
+        <h3>Customer Orders & Insights</h3>
+      </div>
+    </div>
+    <div class="card-link" onclick="scrollToSection('flashSection')">
+      <div class="card">
+        <img src="flash_sale.jpeg" alt="Flash Sale">
+        <h3>Flash Sale Management</h3>
+      </div>
+    </div>
+    <div class="card-link" onclick="scrollToSection('chatSection')">
+      <div class="card">
+        <img src="chat_support.jpg" alt="Support">
+        <h3>Chat / Support View</h3>
+      </div>
+    </div>
+  </div>
+
+  <div id="inventorySection">
+    <h4>📦 Inventory Management</h4>
+    <button class="blue-btn" onclick="window.location.href='addnewitem.html'">Add New Item</button>
+    <table id="inventoryTable">
+      <thead>
+        <tr>
+          <th>SKU</th><th>Name</th><th>Category</th><th>Qty</th><th>Expiry</th><th>Shelf Number</th><th>Actions</th>
+
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="expirySection">
+    <h4>⏳ Expiring Products</h4>
+    <div class="filter-tools">
+      <input type="date">
+      <button class="blue-btn">Filter</button>
+      <button class="blue-btn">Export CSV</button>
+    </div>
+    <table id="expiryTable">
+      <thead>
+        <tr>
+          <th>Name</th><th>Expiry</th><th>Qty</th><th>Category</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="ordersSection">
+    <h4>📊 Customer Orders & Insights</h4>
+    <table>
+      <tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th></tr>
+      <tr><td>O1001</td><td>John Doe</td><td>Milk x2</td><td>₹200</td><td>2025-06-25</td></tr>
+    </table>
+  </div>
+
+  <div id="flashSection">
+    <h4>🌟 Flash Sale Management</h4>
+    <button class="blue-btn" onclick="activateFlashSale()">Activate Flash Sale</button>
+    <table id="flashSaleTable">
+      <thead>
+        <tr>
+  <th>Select</th>
+  <th>Name</th>
+  <th>MRP</th>
+  <th>Expiry</th>
+  <th>Discount %</th>
+  <th>Discounted Price</th>
+</tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="chatSection">
+    <h4>💬 Chat / Support View</h4>
+    <table>
+      <tr><th>Query ID</th><th>Customer</th><th>Message</th><th>Time</th><th>Action</th></tr>
+      <tr><td>Q101</td><td>Alice</td><td>When will milk be back?</td><td>10:15 AM</td><td><button class="blue-btn">Reply</button></td></tr>
+      <tr><td>Q102</td><td>Bob</td><td>I found expired item.</td><td>11:30 AM</td><td><button class="blue-btn">Reply</button></td></tr>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  let inventoryItems = [];
+
+  function loadInventory() {
+    fetch('/api/inventory')
+      .then(res => res.json())
+      .then(data => {
+        inventoryItems = data;
+        const tbody = document.querySelector('#inventoryTable tbody');
+        tbody.innerHTML = '';
+        data.forEach((item, index) => {
+          tbody.innerHTML += `
+            <tr data-sku="${item.SKU}">
+  <td>${item.SKU}</td>
+  <td>${item.Name}</td>
+  <td>${item.Category}</td>
+  <td contenteditable="false" class="qty">${item.Qty}</td>
+  <td>${item.Expiry}</td>
+  <td>${item.ShelfNumber || ''}</td> 
+
+  <td>
+    <button class="blue-btn" onclick="editQty(this)">Edit</button>
+    <button class="blue-btn" onclick="deleteRow(this)">Delete</button>
+  </td>
+            </tr>`;
+        });
+
+        loadFlashSale(data); // Pass full inventory list
+      });
+  }
+
+  function editQty(btn) {
+    const row = btn.closest('tr');
+    const qtyCell = row.querySelector('.qty');
+
+    if (btn.textContent === 'Edit') {
+      qtyCell.contentEditable = true;
+      qtyCell.focus();
+      btn.textContent = 'Save';
+    } else {
+      qtyCell.contentEditable = false;
+      btn.textContent = 'Edit';
+      const newQty = qtyCell.textContent.trim();
+      console.log('Updated Qty:', newQty);
+      // Optional: Send to backend
+    }
+  }
+
+  function deleteRow(btn) {
+  const row = btn.closest('tr');
+  const skuToDelete = row.getAttribute('data-sku');
+  row.remove();
+
+  // Remove from Flash Sale table
+  const flashRows = document.querySelectorAll('#flashSaleTable tbody tr');
+  flashRows.forEach(flashRow => {
+    if (flashRow.getAttribute('data-sku') === skuToDelete) {
+      flashRow.remove();
+    }
+  });
+}
+
+  function loadFlashSale(inventoryList) {
+  const tbody = document.querySelector('#flashSaleTable tbody');
+  tbody.innerHTML = '';
+
+  inventoryList.forEach(item => {
+    const discount = item['Discount %'] || 0;
+    const mrp = parseFloat(item.MRP);
+    const discountedPrice = mrp - (mrp * discount / 100);
+
+    tbody.innerHTML += `
+      <tr data-sku="${item.SKU}">
+        <td class="checkbox-cell"><input type="checkbox"></td>
+        <td>${item.Name}</td>
+        <td>${item.MRP}</td>
+        <td>${item.Expiry}</td>
+        <td><input type="number" value="${discount}" class="discount-input" data-mrp="${item.MRP}" oninput="recalculatePrice(this)" style="width:60px;"></td>
+        <td class="discounted-price">₹${discountedPrice.toFixed(2)}</td>
+      </tr>`;
+  });
+}
+
+function recalculatePrice(input) {
+  const mrp = parseFloat(input.getAttribute('data-mrp'));
+  const discount = parseFloat(input.value);
+  const priceCell = input.closest('tr').querySelector('.discounted-price');
+
+  if (!isNaN(mrp) && !isNaN(discount)) {
+    const discounted = mrp - (mrp * discount / 100);
+    priceCell.textContent = '₹' + discounted.toFixed(2);
+  }
+}
+function activateFlashSale() {
+  const selectedItems = [];
+  document.querySelectorAll('#flashSaleTable tbody tr').forEach(row => {
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    if (checkbox.checked) {
+      const name = row.children[1].textContent;
+      const expiry = row.children[3].textContent;
+      const discount = row.children[4].querySelector('input').value;
+      const discountedPrice = row.children[5].textContent.replace('₹','');
+      selectedItems.push({ name, expiry, discount, discountedPrice });
+    }
+  });
+
+  localStorage.setItem('flashSaleSelected', JSON.stringify(selectedItems));
+localStorage.setItem('flashShown', 'false'); // Reset view flag
+
+alert("Flash sale activated! 🎉");
+}
+
+  window.onload = () => {
+    loadInventory();
+    // You can also call loadFlashSale separately with filtered flash sale products
+  };
+</script>
+</body>
+</html>
