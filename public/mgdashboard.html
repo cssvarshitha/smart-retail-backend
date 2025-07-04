@@ -187,9 +187,8 @@
   <div id="expirySection">
     <h4>⏳ Expiring Products</h4>
     <div class="filter-tools">
-      <input type="date" id="expiryDateInput">
-<button class="blue-btn" onclick="filterExpiringProducts()">Filter</button>
-
+      <input type="date">
+      <button class="blue-btn">Filter</button>
       <button class="blue-btn">Export CSV</button>
     </div>
     <table id="expiryTable">
@@ -261,8 +260,7 @@
   <td>${item.Category}</td>
   <td contenteditable="false" class="qty">${item.Qty}</td>
   <td>${item.Expiry}</td>
-  <td>${item.ShelfNumber || ''}</td> 
-
+  <td>${item.ShelfNumber || ''}</td>
   <td>
     <button class="blue-btn" onclick="editQty(this)">Edit</button>
     <button class="blue-btn" onclick="deleteRow(this)">Delete</button>
@@ -349,6 +347,7 @@ function activateFlashSale() {
     }
   });
 
+  
   localStorage.setItem('flashSaleSelected', JSON.stringify(selectedItems));
 localStorage.setItem('flashShown', 'false'); // Reset view flag
 
@@ -359,40 +358,6 @@ alert("Flash sale activated! 🎉");
     loadInventory();
     // You can also call loadFlashSale separately with filtered flash sale products
   };
-  function filterExpiringProducts() {
-  const dateInput = document.getElementById('expiryDateInput').value;
-  if (!dateInput) {
-    alert('Please select a date.');
-    return;
-  }
-
-  fetch(`/api/expiring-by-date?date=${dateInput}`)
-    .then(res => res.json())
-    .then(data => {
-      const tbody = document.querySelector('#expiryTable tbody');
-      tbody.innerHTML = '';
-
-      if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4">No expiring products found.</td></tr>';
-        return;
-      }
-
-      data.forEach(item => {
-        tbody.innerHTML += `
-          <tr>
-            <td>${item.Name}</td>
-            <td>${item.Expiry}</td>
-            <td>${item.Qty}</td>
-            <td>${item.Category}</td>
-          </tr>
-        `;
-      });
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Failed to fetch expiring products');
-    });
-}
 </script>
 </body>
 </html>
