@@ -176,7 +176,7 @@
     <table id="inventoryTable">
       <thead>
         <tr>
-          <th>SKU</th><th>Name</th><th>Category</th><th>Qty</th><th>Expiry</th><th>Shelf Number</th><th>Actions</th>
+          <th>SKU</th><th>Name</th><th>Category</th><th>Qty</th><th>Expiry</th><th>Actions</th>
 
         </tr>
       </thead>
@@ -245,32 +245,44 @@
 
   let inventoryItems = [];
 
-  function loadInventory() {
-    fetch('/api/inventory')
-      .then(res => res.json())
-      .then(data => {
-        inventoryItems = data;
-        const tbody = document.querySelector('#inventoryTable tbody');
-        tbody.innerHTML = '';
-        data.forEach((item, index) => {
-          tbody.innerHTML += `
-            <tr data-sku="${item.SKU}">
-  <td>${item.SKU}</td>
-  <td>${item.Name}</td>
-  <td>${item.Category}</td>
-  <td contenteditable="false" class="qty">${item.Qty}</td>
-  <td>${item.Expiry}</td>
-  <td>${item.ShelfNumber || ''}</td>
-  <td>
-    <button class="blue-btn" onclick="editQty(this)">Edit</button>
-    <button class="blue-btn" onclick="deleteRow(this)">Delete</button>
-  </td>
-            </tr>`;
-        });
-
-        loadFlashSale(data); // Pass full inventory list
+ function loadInventory() {
+  console.log('🔄 Loading inventory...');
+  
+  fetch('/api/inventory')
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to fetch inventory');
+      return res.json();
+    })
+    .then(data => {
+      console.log('📦 Inventory loaded:', data);
+      inventoryItems = data;
+      
+      const tbody = document.querySelector('#inventoryTable tbody');
+      tbody.innerHTML = '';
+      
+      data.forEach((item, index) => {
+        tbody.innerHTML += `
+          <tr data-sku="${item.SKU}">
+            <td>${item.SKU}</td>
+            <td>${item.Name}</td>
+            <td>${item.Category}</td>
+            <td contenteditable="false" class="qty">${item.Qty}</td>
+            <td>${item.Expiry}</td>
+            <td>
+              <button class="blue-btn" onclick="editQty(this)">Edit</button>
+              <button class="blue-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>`;
       });
-  }
+
+      loadFlashSale(data);
+      console.log('✅ Inventory table updated');
+    })
+    .catch(err => {
+      console.error('❌ Error loading inventory:', err);
+      alert('Error loading inventory: ' + err.message);
+    });
+}
 
   function editQty(btn) {
     const row = btn.closest('tr');
@@ -355,9 +367,16 @@ alert("Flash sale activated! 🎉");
 }
 
   window.onload = () => {
-    loadInventory();
-    // You can also call loadFlashSale separately with filtered flash sale products
-  };
+  loadInventory();
+  
+  // Check if we came from add item page
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('refresh')) {
+    console.log('🔄 Auto-refreshing from add item page');
+    // Remove the refresh parameter from URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+};
 </script>
 </body>
 </html>

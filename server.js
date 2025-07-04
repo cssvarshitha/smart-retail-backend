@@ -96,10 +96,52 @@ app.get('/api/inventory', (req, res) => {
 });
 
 app.post('/api/inventory', (req, res) => {
-  const data = loadExcelData();
-  data.push(req.body);
-  saveToExcel(data);
-  res.json({ message: 'Item added successfully!' });
+  try {
+    const newItem = req.body;
+    
+    // Validate required fields
+    if (!newItem.SKU || !newItem.Name || !newItem.Expiry) {
+      return res.status(400).json({ 
+        message: 'Missing required fields: SKU, Name, Expiry' 
+      });
+    }
+
+    console.log('📥 New item received:', newItem);
+
+    const data = loadExcelData();
+    
+    // Check for duplicate SKU
+    const existingSKU = data.find(item => item.SKU === newItem.SKU);
+    if (existingSKU) {
+      return res.status(409).json({ 
+        message: 'SKU already exists! Please use a different SKU.' 
+      });
+    }
+
+    // Normalize the item structure
+    const normalizedItem = {
+      SKU: newItem.SKU,
+      Name: newItem.Name,
+      Category: newItem.Category,
+      Qty: parseInt(newItem.Qty),
+      MRP: parseFloat(newItem.MRP),
+      Expiry: newItem.Expiry,
+      ShelfNumber: newItem.ShelfNumber || '', // ✅ Fixed field name
+      'Discount %': parseFloat(newItem['Discount %']) || 0,
+      'Discounted Price': parseFloat(newItem['Discounted Price']) || 0,
+      FlashSale: false
+    };
+
+    data.push(normalizedItem);
+    saveToExcel(data);
+
+    console.log('✅ Item added successfully');
+    res.json({ message: 'Item added successfully!', item: normalizedItem });
+    
+  } catch (error) {
+    console.error('❌ Server error:', error);
+    res.status(500).json({ message: 'Server error: ' + error.message });
+  }
 });
 
 // ⏳ Expiring Items
