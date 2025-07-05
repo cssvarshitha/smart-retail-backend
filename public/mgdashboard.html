@@ -184,22 +184,45 @@
     </table>
   </div>
 
-  <div id="expirySection">
-    <h4>⏳ Expiring Products</h4>
-    <div class="filter-tools">
-      <input type="date">
-      <button class="blue-btn">Filter</button>
-      <button class="blue-btn">Export CSV</button>
-    </div>
-    <table id="expiryTable">
-      <thead>
-        <tr>
-          <th>Name</th><th>Expiry</th><th>Qty</th><th>Category</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+<div id="expirySection">
+  <h4>⏳ Expiring Products</h4>
+  <div class="filter-tools">
+    <input type="date" id="expiryDateFilter" placeholder="Enter date">
+    <button class="blue-btn" onclick="filterExpiringProducts()">Filter</button>
+    <button class="blue-btn" onclick="clearExpiryFilter()">Clear</button>
+    <button class="blue-btn" onclick="exportExpiringCSV()">Export CSV</button>
   </div>
+  
+  <!-- Results info -->
+  <div id="expiryResultsInfo" style="margin: 10px 0; font-weight: bold; color: #0071ce; display: none;">
+    <span id="expiryResultCount"></span>
+  </div>
+  
+  <!-- Loading indicator -->
+  <div id="expiryLoading" style="display: none; text-align: center; margin: 20px;">
+    <span>Loading expiring products...</span>
+  </div>
+  
+  <!-- No results message -->
+  <div id="noExpiryResults" style="display: none; text-align: center; margin: 20px; color: #666;">
+    No products found expiring within 10 days of the selected date.
+  </div>
+  
+  <table id="expiryTable">
+    <thead>
+      <tr>
+        <th>SKU</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Expiry Date</th>
+        <th>Qty</th>
+        <th>MRP</th>
+        <th>Days Until Expiry</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
   <div id="ordersSection">
     <h4>📊 Customer Orders & Insights</h4>
@@ -377,6 +400,125 @@ alert("Flash sale activated! 🎉");
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 };
+function filterExpiringProducts() {
+  const dateInput = document.getElementById('expiryDateFilter');
+  const selectedDate = dateInput.value;
+  
+  if (!selectedDate) {
+    alert('Please select a date first!');
+    return;
+  }
+  
+  // Show loading
+  document.getElementById('expiryLoading').style.display = 'block';
+  document.getElementById('noExpiryResults').style.display = 'none';
+  document.getElementById('expiryResultsInfo').style.display = 'none';
+  
+  // Clear existing table
+  const tbody = document.querySelector('#expiryTable tbody');
+  tbody.innerHTML = '';
+  
+  console.log('🔄 Filtering expiring products for date:', selectedDate);
+  
+  fetch(`/api/expiring-products?date=${selectedDate}`)
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to fetch expiring products');
+      return res.json();
+    })
+    .then(data => {
+      console.log('📦 Expiring products loaded:', data);
+      
+      // Hide loading
+      document.getElementById('expiryLoading').style.display = 'none';
+      
+      if (data.length === 0) {
+        document.getElementById('noExpiryResults').style.display = 'block';
+        document.getElementById('expiryResultsInfo').style.display = 'none';
+        return;
+      }
+      
+      // Show results count
+      document.getElementById('expiryResultCount').textContent = 
+        `Found ${data.length} product(s) expiring within 10 days of ${selectedDate}`;
+      document.getElementById('expiryResultsInfo').style.display = 'block';
+      
+      // Populate table
+      data.forEach(item => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+          <td>${item.SKU}</td>
+          <td>${item.Name}</td>
+          <td>${item.Category}</td>
+          <td>${item.Expiry}</td>
+          <td>${item.Qty}</td>
+          <td>₹${item.MRP}</td>
+          <td style="color: ${item.daysUntilExpiry <= 5 ? '#dc3545' : '#ffc107'}; font-weight: bold;">
+            ${item.daysUntilExpiry} days
+          </td>
+        `;
+      });
+      
+      console.log('✅ Expiring products table updated');
+    })
+    .catch(err => {
+      console.error('❌ Error loading expiring products:', err);
+      document.getElementById('expiryLoading').style.display = 'none';
+      alert('Error loading expiring products: ' + err.message);
+    });
+}
+
+function clearExpiryFilter() {
+  document.getElementById('expiryDateFilter').value = '';
+  document.getElementById('expiryResultsInfo').style.display = 'none';
+  document.getElementById('noExpiryResults').style.display = 'none';
+  
+  // Clear table
+  const tbody = document.querySelector('#expiryTable tbody');
+  tbody.innerHTML = '';
+  
+  console.log('🧹 Expiring products filter cleared');
+}
+
+function exportExpiringCSV() {
+  const table = document.getElementById('expiryTable');
+  const tbody = table.querySelector('tbody');
+  
+  if (tbody.rows.length === 0) {
+    alert('No data to export. Please filter products first.');
+    return;
+  }
+  
+  // Create CSV content
+  let csvContent = 'SKU,Name,Category,Expiry Date,Qty,MRP,Days Until Expiry\n';
+  
+  Array.from(tbody.rows).forEach(row => {
+    const rowData = Array.from(row.cells).map(cell => {
+      // Clean the cell content (remove currency symbols, extract numbers)
+      let content = cell.textContent.trim();
+      if (content.includes('₹')) {
+        content = content.replace('₹', '');
+      }
+      if (content.includes('days')) {
+        content = content.replace(' days', '');
+      }
+      return `"${content}"`;
+    });
+    csvContent += rowData.join(',') + '\n';
+  });
+  
+  // Create and download file
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `expiring_products_${new Date().toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+  
+  console.log('📊 Expiring products CSV exported');
+}
 </script>
 </body>
 </html>

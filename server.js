@@ -156,6 +156,57 @@ app.get('/api/expiring', (req, res) => {
   });
   res.json(expiring);
 });
+// ⏳ Expiring Products Filter (NEW FEATURE)
+app.get('/api/expiring-products', (req, res) => {
+  try {
+    const { date } = req.query;
+    
+    if (!date) {
+      return res.status(400).json({ message: 'Date parameter is required' });
+    }
+    
+    console.log('🔍 Filtering expiring products for date:', date);
+    
+    const data = loadExcelData();
+    const filterDate = new Date(date);
+    
+    // Calculate the end date (10 days after the entered date)
+    const endDate = new Date(filterDate);
+    endDate.setDate(filterDate.getDate() + 10);
+    
+    console.log('📅 Filter range:', filterDate.toISOString().split('T')[0], 'to', endDate.toISOString().split('T')[0]);
+    
+    const expiringProducts = data.filter(item => {
+      const expiryDate = new Date(item.Expiry);
+      
+      // Check if expiry date is within the 10-day window from the entered date
+      return expiryDate >= filterDate && expiryDate <= endDate;
+    });
+    
+    // Add days until expiry calculation for each product
+    const enrichedProducts = expiringProducts.map(item => {
+      const expiryDate = new Date(item.Expiry);
+      const timeDiff = expiryDate.getTime() - filterDate.getTime();
+      const daysUntilExpiry = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      
+      return {
+        ...item,
+        daysUntilExpiry: daysUntilExpiry
+      };
+    });
+    
+    // Sort by days until expiry (most urgent first)
+    enrichedProducts.sort((a, b) => a.daysUntilExpiry - b.daysUntilExpiry);
+    
+    console.log(`✅ Found ${enrichedProducts.length} products expiring within 10 days`);
+    
+    res.json(enrichedProducts);
+    
+  } catch (error) {
+    console.error('❌ Error filtering expiring products:', error);
+    res.status(500).json({ message: 'Server error: ' + error.message });
+  }
+});
 
 // ⚡ Flash Sale - Full Table
 app.get('/api/flash-sale', (req, res) => {
